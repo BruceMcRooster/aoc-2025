@@ -25,6 +25,22 @@ struct Day02: AdventDay {
   }
 
   func part2() -> Any {
-    return 0
+    let matches = data.matches(of: /(?<start>\d+)-(?<end>\d+),?/)
+    
+    var sum = 0
+    
+    for match in matches {
+      for id in Int(String(match.output.start))!...Int(String(match.output.end))! {
+        let asString = String(id)
+        
+        let regex = /^(.+?)\1+$/
+        
+        if let _ = asString.wholeMatch(of: regex) {
+          sum += id
+        }
+      }
+    }
+    
+    return sum
   }
 }
