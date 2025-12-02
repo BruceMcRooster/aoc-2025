@@ -30,13 +30,24 @@ struct Day02: AdventDay {
     var sum = 0
     
     for match in matches {
-      for id in Int(String(match.output.start))!...Int(String(match.output.end))! {
+      rangeIterator: for id in Int(String(match.output.start))!...Int(String(match.output.end))! {
         let asString = String(id)
         
-        let regex = /^(.+?)\1+$/
+        let length = asString.count
         
-        if let _ = asString.wholeMatch(of: regex) {
-          sum += id
+        var possibleLengths = [Int]()
+        
+        for i in 1..<length/2+1 where length % i == 0 {
+          possibleLengths.append(i)
+        }
+        
+        for possibleLength in possibleLengths {
+          let lengthedString = String(asString.prefix(possibleLength))
+          let repeatedString = String(repeating: lengthedString, count: length / possibleLength)
+          if repeatedString == asString {
+            sum += id
+            continue rangeIterator
+          }
         }
       }
     }
