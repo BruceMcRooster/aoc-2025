@@ -35,6 +35,32 @@ struct Day03: AdventDay {
   }
 
   func part2() -> Any {
-    return 0
+    let banks = data.split(separator: "\n").map({$0.utf8.map({$0 - 48})})
+    
+    var totalJoltage = 0
+    
+    for bank in banks {
+      var currIndex = 0
+      
+      for lookingForCellNumber in stride(from: 11, through: 0, by: -1) {
+        let searchSpace = bank[currIndex..<bank.count-lookingForCellNumber]
+        
+        let max = searchSpace.max()!
+        let maxIndex = searchSpace.firstIndex(of: max)!
+        
+        let multiplier = {
+          var val = 1
+          for _ in 0..<lookingForCellNumber {
+            val *= 10
+          }
+          return val
+        }()
+        
+        totalJoltage += Int(max) * multiplier
+        currIndex = maxIndex + 1
+      }
+    }
+    
+    return totalJoltage
   }
 }
