@@ -9,6 +9,7 @@ struct Day06Tests {
      45 64  387 23 
       6 98  215 314
     *   +   *   +  
+    
     """
 
   @Test func testPart1() async throws {
@@ -16,6 +17,6 @@ struct Day06Tests {
   }
 
   @Test func testPart2() async throws {
-    #expect(true)
+    #expect(String(describing: Day06(data: testInput1).part2()) == "3263827")
   }
 }
