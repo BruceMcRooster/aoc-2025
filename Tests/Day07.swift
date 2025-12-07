@@ -28,6 +28,6 @@ struct Day07Tests {
   }
 
   @Test func testPart2() async throws {
-    #expect(true)
+    #expect(String(describing: Day07(data: testInput1).part2()) == "40")
   }
 }
