@@ -95,6 +95,17 @@ struct Day08: AdventDay {
       
       return searchPath.last!
     }
+    
+    func getLargestConnectedGraphSize() -> Int {
+      var max = 0
+      
+      for boxDatum in boxGraph.values {
+        guard case let BoxGraphDatum.treeSize(size) = boxDatum else { continue }
+        if size > max { max = size }
+      }
+      
+      return max
+    }
   }
   
   func part1() -> Any {
@@ -121,6 +132,19 @@ struct Day08: AdventDay {
   }
 
   func part2() -> Any {
-    return 0
+    let allBoxes = data.split(separator: "\n").map({ $0.wholeMatch(of: /(?<x>\d+),(?<y>\d+),(?<z>\d+)/)!.output }).map({ JunctionBox(x: Int($0.x)!, y: Int($0.y)!, z: Int($0.z)!) })
+    
+    var boxGraph = UnionFindDataStructure()
+    
+    for possibleConnection in allBoxes
+      .combinations(ofCount: 2)
+      .sorted(by: { $0[0]<->$0[1] < $1[0]<->$1[1] }) {
+      boxGraph.connect(possibleConnection[0], to: possibleConnection[1])
+      if boxGraph.getLargestConnectedGraphSize() == allBoxes.count {
+        // This was the connection that made that happen
+        return Int(exactly: possibleConnection[0].x * possibleConnection[1].x)!
+      }
+    }
+    fatalError("No final connection found!")
   }
 }
